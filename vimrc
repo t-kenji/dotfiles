@@ -10,27 +10,59 @@ set fileencodings=utf-8,euc-jp,sjis
 set fileformats=unix,dos,mac
 set formatoptions+=mm
 set pastetoggle=
+set clipboard=unnamed,unnamedplus,autoselect
 set lazyredraw
 set nobackup
 set noswapfile
 set history=1000
 set hidden                          " バッファを切り替えても undo の効力を破棄しない
+set switchbuf=useopen
 " }}}
 
 " statusline settings {{{
-set ruler
 set showmode
 set showcmd
-set statusline=%{g:gitCurrentBranch}      " Git のブランチ名表示
-set statusline+=%F                         " ファイル名表示
-set statusline+=%m                        " 変更チェック表示
-set statusline+=%r                        " 読み込み専用チェック表示
-set statusline+=%h                        " ヘルプページチェック表示
-set statusline+=%w                        " プレビューウィンドウチェック表示
-set statusline+=%=                        " 以降右寄せ表示
-set statusline+=[COL=%v,LOW=%l/%L]        " 現在/全体行数表示
-set statusline+=[%{&fenc},%{&ff}] " エンコーディング,フォーマット表示
+set statusline=[%n]                   " バッファ番号表示
+set statusline+=%{g:gitCurrentBranch} " Git のブランチ名表示
+set statusline+=%F                    " ファイル名表示
+set statusline+=%m                    " 変更チェック表示
+set statusline+=%r                    " 読み込み専用チェック表示
+set statusline+=%h                    " ヘルプページチェック表示
+set statusline+=%w                    " プレビューウィンドウチェック表示
+set statusline+=%=                    " 以降右寄せ表示
+set statusline+=[COL=%v,LOW=%l/%L]    " 現在/全体行数表示
+set statusline+=[%{&fenc},%{&ff}]     " エンコーディング,フォーマット表示
 set laststatus=2
+
+"挿入モード時、ステータスラインの色を変更
+let g:hi_insert = 'highlight StatusLine guifg=darkblue guibg=darkyellow gui=none ctermfg=darkgreen ctermbg=lightgreen cterm=none'
+
+if has('syntax')
+  augroup InsertHook
+    autocmd!
+    autocmd InsertEnter * call s:StatusLine('Enter')
+    autocmd InsertLeave * call s:StatusLine('Leave')
+  augroup END
+endif
+let s:slhlcmd = ''
+function! s:StatusLine(mode)
+  if a:mode == 'Enter'
+    silent! let s:slhlcmd = 'highlight ' . s:GetHighlight('StatusLine')
+    silent exec g:hi_insert
+  else
+    highlight clear StatusLine
+    silent exec s:slhlcmd
+    redraw
+  endif
+endfunction
+function! s:GetHighlight(hi)
+  redir => hl
+  exec 'highlight '.a:hi
+  redir END
+  let hl = substitute(hl, '[\r\n]', '', 'g')
+  let hl = substitute(hl, 'xxx', '', '')
+  return hl
+endfunction
 
 " git のブランチを表示
 let g:gitCurrentBranch = ''
@@ -50,6 +82,7 @@ autocmd BufEnter * :call GitCurrentBranch()
 " }}}
 
 " style settings {{{
+set t_Co=256
 colorscheme elflord
 syntax on
 set number
