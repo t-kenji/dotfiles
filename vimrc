@@ -139,3 +139,10 @@ endfunction
 nmap ,nn :call Num_switch()<CR>
 " }}}
 
+"" Gtags settings {{{
+"nmap <C-g> :Gtags -g <C-r><C-w>
+"nmap <C-h> :Gtags -f %<CR>
+"nmap <C-j> :GtagsCursor<CR>
+"nmap <C-n> :cn<CR>
+"nmap <C-p> :cp<CR>
+"" }}}
