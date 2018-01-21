@@ -13,3 +13,4 @@ replace() {
 
 replace file ~/.gitconfig gitconfig
 replace file ~/.vimrc vimrc
+replace file ~/.byobu/.tmux.conf tmux.conf

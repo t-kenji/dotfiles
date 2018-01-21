@@ -23,7 +23,6 @@ set switchbuf=useopen
 set showmode
 set showcmd
 set statusline=[%n]                   " バッファ番号表示
-set statusline+=%{g:gitCurrentBranch} " Git のブランチ名表示
 set statusline+=%F                    " ファイル名表示
 set statusline+=%m                    " 変更チェック表示
 set statusline+=%r                    " 読み込み専用チェック表示
@@ -35,7 +34,7 @@ set statusline+=[%{&fenc},%{&ff}]     " エンコーディング,フォーマッ
 set laststatus=2
 
 "挿入モード時、ステータスラインの色を変更
-let g:hi_insert = 'highlight StatusLine guifg=darkblue guibg=darkyellow gui=none ctermfg=darkgreen ctermbg=lightgreen cterm=none'
+let g:hi_insert = 'highlight StatusLine ctermfg=22 ctermbg=10 cterm=bold'
 
 if has('syntax')
   augroup InsertHook
@@ -63,23 +62,6 @@ function! s:GetHighlight(hi)
   let hl = substitute(hl, 'xxx', '', '')
   return hl
 endfunction
-
-" git のブランチを表示
-let g:gitCurrentBranch = ''
-function! GitCurrentBranch()
-    let cwd = getcwd()
-    cd %:p:h
-    let branch = matchlist(system('/usr/bin/env git branch -a --no-color'), '\v\* ([0-9A-Za-z\/]*)\r?\n')
-    execute 'cd '.cwd
-    if (len(branch))
-        let g:gitCurrentBranch = '[git:'.branch[1].']'
-    else
-        let g:gitCurrentBranch = ''
-    endif
-    return g:gitCurrentBranch
-endfunction
-autocmd BufEnter * :call GitCurrentBranch()
-" }}}
 
 " style settings {{{
 set t_Co=256
@@ -122,7 +104,7 @@ for n in range(1, 9)
   execute 'nnoremap <silent> [Tag]'.n ':<C-u>tabnext'.n.'<CR>'
 endfor
 " tab navigation
-map <silent> [Tag]c :tablast <bar> tabnew<CR>
+map [Tag]c :tablast <bar> tabnew 
 map <silent> [Tag]x :tabclose<CR>
 map <silent> [Tag]n :tabnext<CR>
 map <silent> [Tag]p :tabprevious<CR>
