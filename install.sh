@@ -11,6 +11,25 @@ replace() {
     ln -sf $ENTDIR/$3 $2
 }
 
-replace file ~/.gitconfig gitconfig
-replace file ~/.vimrc vimrc
-replace file ~/.byobu/.tmux.conf tmux.conf
+ALL=$(find . -type f -maxdepth 1 | sed -e 's/.\///' | grep -v 'install')
+TARGETS=${@-all}
+if [[ $TARGETS == all ]]; then
+    TARGETS=$ALL
+fi
+
+for target in $TARGETS; do
+    case $target in
+    gitconfig)
+        replace file ~/.gitconfig gitconfig
+        ;;
+    vimrc)
+        replace file ~/.vimrc vimrc
+        ;;
+    tmux.conf)
+        replace file ~/.tmux.conf tmux.conf
+        ;;
+    *)
+        echo "unknown target: $target"
+        ;;
+    esac
+done
