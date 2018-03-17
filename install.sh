@@ -11,7 +11,7 @@ replace() {
     ln -sf $ENTDIR/$3 $2
 }
 
-ALL=$(find . -type f -maxdepth 1 | sed -e 's/.\///' | grep -v 'install')
+ALL=$(find . -maxdepth 1 -type f | sed -e 's/.\///' | grep -v 'install')
 TARGETS=${@-all}
 if [[ $TARGETS == all ]]; then
     TARGETS=$ALL
