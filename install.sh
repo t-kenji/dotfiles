@@ -28,6 +28,9 @@ for target in $TARGETS; do
     tmux.conf)
         replace file ~/.tmux.conf tmux.conf
         ;;
+    bashrc)
+        cat bashrc >> ~/.bashrc
+        ;;
     *)
         echo "unknown target: $target"
         ;;
