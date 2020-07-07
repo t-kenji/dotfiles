@@ -1,2 +1,2 @@
 eval "$(direnv hook bash)"
-EDITOR=vim
+export EDITOR=vim
