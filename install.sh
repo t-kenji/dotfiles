@@ -19,6 +19,9 @@ fi
 
 for target in $TARGETS; do
     case $target in
+    gdbinit)
+        replace file ~/.gdbinit gdbinit
+        ;;
     gitconfig)
         replace file ~/.gitconfig gitconfig
         ;;
